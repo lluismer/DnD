@@ -73,5 +73,3 @@ def higherAvgDmg(diceMod1,diceMod2, dmgDice1: list,dmgDice2: list,AC):
     dmgXturn2 = prob_hit2 * avg_dmg2
 
     return [dmgXturn1,dmgXturn2]
-
-def newAvgDmg(attack: Attack, defender: Defender):

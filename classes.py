@@ -19,6 +19,11 @@ class DamageType(IntEnum):
 
 @dataclass
 class Dice:
+    """ Represent dices in NdF format (2d6).
+
+    number: How many dice are rolled (N).
+    faces:  How many faces each die has (F).
+    """
     number: int
     faces: int
 
