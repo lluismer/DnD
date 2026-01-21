@@ -1,10 +1,10 @@
-from classes import Attack, Defender, DamageType, Dice, Damage, ToHit
+from classes import Attack, Defender, DamageType, Dice, Damage, ToHit, AttackTry
 from dice_roll import dice_roll,d20
 
-def dmg(attack: Attack,defender: Defender,crits: int):
+def dmg(attack: Attack,defender: Defender,crits: bool):
     dmg_global = 0
-    dmg_attack = 0
     for i in attack.damage:
+        dmg_attack = 0
         dmg_attack += i.dmg_modifier
         for j in range(i.dice.number):
             dmg_attack += dice_roll(i.dice.faces)
@@ -18,26 +18,36 @@ def dmg(attack: Attack,defender: Defender,crits: int):
     return dmg_global
 
 def avgDmgXturn(attack: Attack,defender: Defender,try_num: int = 100000):
-    is_crit = 0
-    hits = 0
     results = []
-
 
     for i in range(try_num):
         bonus_dice_rolls = []
+        dmgs = 0
+        is_crit = False
+        hits = False
+
         for j in attack.to_hit.bonus_dice:
             for s in range(j.number):
                 bonus_dice_rolls.append(dice_roll(j.faces))
+
         roll = d20()
         roll_afterMod = roll + attack.to_hit.hit_mod + sum(bonus_dice_rolls)
         is_crit = (roll == 20)
-        if roll_afterMod >= defender.ac or is_crit == True:
-            hits = 1
+
+        if roll_afterMod >= defender.ac or is_crit:
+            hits = True
         else:
-            hits = 0
-            results.append((roll_afterMod,0))
+            hits = False
+            results.append(AttackTry(roll,roll_afterMod,dmgs,is_crit,hits))
         
-        if hits == 1 and roll != 1:
-            dmg = dmg(attack,defender,is_crit)
-            results.append((roll_afterMod,dmg))
+        if hits and roll != 1:
+            dmgs = dmg(attack,defender,is_crit)
+            results.append(AttackTry(roll,roll_afterMod,dmgs,is_crit,hits))
+
     return results
+
+firebolt = Attack(ToHit(8,[]),[Damage(Dice(2,10),0,DamageType(3))])
+earth_elemental = Defender(17,{DamageType.BLUDGEONING, DamageType.PIERCING, DamageType.SLASHING},
+    {DamageType.POISON})
+
+print(avgDmgXturn(firebolt,earth_elemental))

@@ -48,3 +48,11 @@ class Defender:
     ac: int
     resistance: Set[DamageType]
     immunity: Set[DamageType]
+
+@dataclass
+class AttackTry:
+    roll: int
+    rollAfterMod: int
+    dmg: int
+    crit: bool
+    hit: bool
