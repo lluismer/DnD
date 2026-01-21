@@ -2,6 +2,8 @@
 #Libraries
 import random
 
+
+#Main function to get a random roll
 def dice_roll(faceNum):
     return random.randint(1,faceNum)
 
@@ -26,8 +28,8 @@ def d20():
 def d00():
     return dice_roll(100)//10
 
+# Dictionary with all the possible faceNum, and a function for when multiple rolls of the same dice needed
 dices = {4:d4,6:d6,8:d8,10:d10,12:d12,20:d20,00:d00}
-
 def multiple_rolls(rollNum,faceNum):
     if(rollNum <= 0):
         return 0
