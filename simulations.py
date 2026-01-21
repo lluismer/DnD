@@ -5,19 +5,30 @@ import matplotlib.pyplot as plt
 
 def roll_list(faceNum,testNum = 100000,diceMod=0,toBeat=0):
     roll_list = []
+    crits = 0
+    fail = 0
     if toBeat != 0:
         wins = 0
         for i in range(testNum):
             num = dice_roll(faceNum) + diceMod
             roll_list.append(num)
-            if num > toBeat:
+            if num == 20:
+                crits += 1
+            elif num >= toBeat:
                 wins += 1
-        return [roll_list,wins]
+            if num == 1:
+                fail += 1
+
+        return [roll_list,wins,crits,fail]
     else:  
         for i in range(testNum):
             num = dice_roll(faceNum) + diceMod
-            roll_list.append(num)      
-        return [roll_list]
+            roll_list.append(num)
+            if num == 20:
+                crits += 1
+            if num == 1:
+                fail += 1
+        return [roll_list,0,crits,fail]
 
 def average(r_list: list):
     return sum(r_list)/len(r_list)
@@ -62,4 +73,3 @@ def higherAvgDmg(diceMod1,diceMod2, dmgDice1: list,dmgDice2: list,AC):
 
     return [dmgXturn1,dmgXturn2]
 
-print(higherAvgDmg(7,8,[2,10,0],[2,6,5],16))
