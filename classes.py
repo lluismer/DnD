@@ -114,8 +114,15 @@ class Character:
     attack_list: List of Attacks that the character has
     defense:     The character defensive variables
     name:        Name of the character
+    hp:          Hit points of the Character
     """
     attack_list: list[Attack]
     defense: Defender
     name: str
+    hp: int
     
+    def takeDamage(self,amount: int):
+        self.hp = max(0,self.hp - amount)
+    
+    def isDead(self):
+        return (self.hp == 0)
