@@ -1,8 +1,8 @@
-from classes import Attack, Defender, DamageType, Dice, Damage, ToHit, AttackTry
+from classes import Attack, Defender, DamageType, Dice, Damage, ToHit, AttackTry, TurnTry
 from dice_roll import dice_roll,d20
 import matplotlib.pyplot as plt
 from modules.test.attacks import firebolt, longbow_2, longbow_brandingSmite
-from modules.test.defenders import earth_elemental
+from modules.test.defenders import earth_elemental, orc
 import matplotlib
 
 def average(r_list: list):
@@ -31,13 +31,8 @@ def dmg(attack: Attack,defender: Defender,crits: bool):
         dmg_global += dmg_attack
     return dmg_global
 
-def avgDmgXturn(attack: Attack,defender: Defender,try_num: int = 100000):
-    results = []
-
-
-    for i in range(try_num):
+def attackTurn(attack: Attack, defender: Defender):
         bonus_dice_rolls = []
-        
         dmgs = 0
         is_crit = False
         hits = False
@@ -54,11 +49,29 @@ def avgDmgXturn(attack: Attack,defender: Defender,try_num: int = 100000):
             hits = True
         else:
             hits = False
-            results.append(AttackTry(roll,roll_afterMod,dmgs,is_crit,hits,defender.ac,attack.name))
+            return AttackTry(roll,roll_afterMod,dmgs,is_crit,hits,defender.ac,attack.name)
         
         if hits and roll != 1:
             dmgs = dmg(attack,defender,is_crit)
-            results.append(AttackTry(roll,roll_afterMod,dmgs,is_crit,hits,defender.ac,attack.name))
+            return AttackTry(roll,roll_afterMod,dmgs,is_crit,hits,defender.ac,attack.name)
+
+def avgDmgXturn(attack: Attack,defender: Defender,try_num: int = 100000):
+    results = []
+
+
+    for i in range(try_num):
+        turn_dmg = 0
+        turn_hits = 0
+
+        for _ in range(attack.attacks_per_action):
+            tr = attackTurn(attack,defender)
+            if tr.dmg >= 0:
+                turn_dmg += tr.dmg
+            if tr.hit:
+                turn_hits += 1
+        results.append(TurnTry(turn_dmg,turn_hits,attack.name))
+
+
 
     return results
 
@@ -121,10 +134,61 @@ def plt3BoxDmg(result1,result2,result3):
     plt.title("Damage boxplot")
     plt.show()
 
+def plotBoxDmgOnHit(results: list):
+    y_dmg = []
+    name = results[0].name
+    for i in results:
+        if i.dmg > 0:
+            y_dmg.append(i.dmg)
+    plt.figure()
+    plt.boxplot([y_dmg], tick_labels=[name], showfliers=False)
+    plt.ylabel("Damage per turn")
+    plt.title(f"{name}: damage boxplot")
+    plt.show()
 
-firebolt_avg = avgDmgXturn(firebolt,earth_elemental)
-longbow_2_avg = avgDmgXturn(longbow_2,earth_elemental)
-longbow_brand_avg = avgDmgXturn(longbow_brandingSmite,earth_elemental)
+def plt2BoxDmgOnHit(result1,result2):
+    y_dmg1 = []
+    y_dmg2 = []
+    name1 = result1[0].name
+    name2 = result2[0].name
+    for i in result1:
+        if i.dmg > 0:
+            y_dmg1.append(i.dmg)
+    for i in result2:
+        if i.dmg > 0:
+            y_dmg2.append(i.dmg)
+    plt.figure()
+    plt.boxplot([y_dmg1,y_dmg2], tick_labels=[name1,name2], showfliers=True)
+    plt.ylabel("Damage per turn")
+    plt.title("Damage boxplot")
+    plt.show()
+
+def plt3BoxDmgOnHit(result1,result2,result3):
+    y_dmg1 = []
+    y_dmg2 = []
+    y_dmg3 = []
+    name1 = result1[0].name
+    name2 = result2[0].name
+    name3 = result3[0].name
+    for i in result1:
+        if i.dmg > 0:
+            y_dmg1.append(i.dmg)
+    for i in result2:
+        if i.dmg > 0:  
+            y_dmg2.append(i.dmg)
+    for i in result3:
+        if i.dmg > 0:
+            y_dmg3.append(i.dmg)
+    plt.figure()
+    plt.boxplot([y_dmg1,y_dmg2,y_dmg3], tick_labels=[name1,name2,name3], showfliers=True)
+    plt.ylabel("Damage per turn")
+    plt.title("Damage boxplot")
+    plt.show()
+
+
+firebolt_avg = avgDmgXturn(firebolt,orc)
+longbow_2_avg = avgDmgXturn(longbow_2,orc)
+longbow_brand_avg = avgDmgXturn(longbow_brandingSmite,orc)
 #plotHistDmg(avgDmgXturn(firebolt,earth_elemental))
 #plotBoxDmg(avgDmgXturn(firebolt,earth_elemental))
-plt2HistDmg(firebolt_avg,longbow_brand_avg)
+plt3BoxDmgOnHit(firebolt_avg,longbow_brand_avg,longbow_2_avg)

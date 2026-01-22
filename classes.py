@@ -60,3 +60,9 @@ class AttackTry:
     hit: bool
     ac: int
     name: str
+
+@dataclass
+class TurnTry:
+    dmg: int
+    hits: int
+    name: int
