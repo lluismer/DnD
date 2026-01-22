@@ -42,6 +42,8 @@ class ToHit:
 class Attack:
     to_hit: ToHit
     damage: List[Damage]
+    name: str
+    attacks_per_action: int
 
 @dataclass
 class Defender:
@@ -57,3 +59,4 @@ class AttackTry:
     crit: bool
     hit: bool
     ac: int
+    name: str
