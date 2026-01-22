@@ -3,7 +3,6 @@ from dice_roll import dice_roll,d20
 import matplotlib.pyplot as plt
 from modules.test.attacks import firebolt, longbow_2, longbow_brandingSmite
 from modules.test.defenders import earth_elemental, orc
-import matplotlib
 
 def average(r_list: list):
     return sum(r_list)/len(r_list)
@@ -191,4 +190,4 @@ longbow_2_avg = avgDmgXturn(longbow_2,orc)
 longbow_brand_avg = avgDmgXturn(longbow_brandingSmite,orc)
 #plotHistDmg(avgDmgXturn(firebolt,earth_elemental))
 #plotBoxDmg(avgDmgXturn(firebolt,earth_elemental))
-plt3BoxDmgOnHit(firebolt_avg,longbow_brand_avg,longbow_2_avg)
+#plt3BoxDmgOnHit(firebolt_avg,longbow_brand_avg,longbow_2_avg)
