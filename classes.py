@@ -56,3 +56,4 @@ class AttackTry:
     dmg: int
     crit: bool
     hit: bool
+    ac: int

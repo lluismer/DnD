@@ -30,15 +30,6 @@ def roll_list(faceNum,testNum = 100000,diceMod=0,toBeat=0):
                 fail += 1
         return [roll_list,0,crits,fail]
 
-def average(r_list: list):
-    return sum(r_list)/len(r_list)
-
-def median(r_list: list):
-    r_list = sorted(r_list)
-    if len(r_list)%2 == 1:
-        return r_list[len(r_list)//2]
-    return (r_list[(len(r_list)//2)-1] + r_list[len(r_list)//2])/2
-
 def roll_histogram(faceNum,testNum=100000):
     r_list = roll_list(faceNum,testNum)[0]
     plt.hist(r_list, bins= range(1,faceNum+2), edgecolor="black", linewidth=1, alpha=0.85)
