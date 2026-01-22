@@ -68,7 +68,7 @@ def avgDmgXturn(attack: Attack,defender: Defender,try_num: int = 100000):
                 turn_dmg += tr.dmg
             if tr.hit:
                 turn_hits += 1
-        results.append(TurnTry(turn_dmg,turn_hits,attack.name))
+        results.append(TurnTry(turn_dmg,turn_hits,[attack.name]))
 
 
 
