@@ -1,8 +1,8 @@
 from classes import Attack, Defender, DamageType, Dice, Damage, ToHit, AttackTry, TurnTry
 from dice_roll import dice_roll,d20
 import matplotlib.pyplot as plt
-from modules.test.attacks import firebolt, longbow_2, longbow_brandingSmite
-from modules.test.defenders import earth_elemental, orc
+from modules.test.Characters import fireball,longbow,longbow_branding,windvane,windvane_meelee,Eldritch_Smite
+from modules.test.Monster import earth
 
 def average(r_list: list):
     return sum(r_list)/len(r_list)
@@ -179,15 +179,42 @@ def plt3BoxDmgOnHit(result1,result2,result3):
         if i.dmg > 0:
             y_dmg3.append(i.dmg)
     plt.figure()
+    plt.boxplot([y_dmg1,y_dmg2,y_dmg3], tick_labels=[name1,name2,name3], showfliers=False)
+    plt.ylabel("Damage per turn")
+    plt.title("Damage boxplot")
+    plt.show()
+
+def plt3BoxDmgOnHit_out(result1,result2,result3):
+    y_dmg1 = []
+    y_dmg2 = []
+    y_dmg3 = []
+    name1 = result1[0].name
+    name2 = result2[0].name
+    name3 = result3[0].name
+    for i in result1:
+        if i.dmg > 0:
+            y_dmg1.append(i.dmg)
+    for i in result2:
+        if i.dmg > 0:  
+            y_dmg2.append(i.dmg)
+    for i in result3:
+        if i.dmg > 0:
+            y_dmg3.append(i.dmg)
+    plt.figure()
     plt.boxplot([y_dmg1,y_dmg2,y_dmg3], tick_labels=[name1,name2,name3], showfliers=True)
     plt.ylabel("Damage per turn")
     plt.title("Damage boxplot")
     plt.show()
 
 
-firebolt_avg = avgDmgXturn(firebolt,orc)
-longbow_2_avg = avgDmgXturn(longbow_2,orc)
-longbow_brand_avg = avgDmgXturn(longbow_brandingSmite,orc)
+#firebolt_avg = avgDmgXturn(fireball,earth)
+#longbow_2_avg = avgDmgXturn(longbow,earth)
+#longbow_brand_avg = avgDmgXturn(longbow_branding,earth)
+
+windvane_meeleea =avgDmgXturn(windvane_meelee,earth)
+windvanea = avgDmgXturn(windvane,earth)
+Eldritch_Smitea = avgDmgXturn(Eldritch_Smite,earth)
 #plotHistDmg(avgDmgXturn(firebolt,earth_elemental))
 #plotBoxDmg(avgDmgXturn(firebolt,earth_elemental))
-#plt3BoxDmgOnHit(firebolt_avg,longbow_brand_avg,longbow_2_avg)
+plt3BoxDmgOnHit(windvane_meeleea,windvanea,Eldritch_Smitea)
+plt3BoxDmgOnHit_out(windvane_meeleea,windvanea,Eldritch_Smitea)

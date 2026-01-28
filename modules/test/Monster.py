@@ -18,3 +18,9 @@ earth_elemental = Character(
         )
     ],
 )
+
+earth = defense=Defender(
+        ac= 17,
+        resistance= {DamageType.BLUDGEONING, DamageType.PIERCING, DamageType.SLASHING},
+        immunity= {DamageType.POISON},
+    )
