@@ -5,8 +5,8 @@ fyn = Character(
     hp = 38,
     defense = Defender(
         ac = 16,  # Armor Class 16
-        resistance = {DamageType.POISON},
-        immunity = set(),
+        resistance = [DamageType.POISON],
+        immunity = [],
     ),
     attack_list=[
         Attack(

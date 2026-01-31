@@ -72,8 +72,8 @@ class Defender:
     immunity:   The list of immunities of the character
     """
     ac: int
-    resistance: Set[DamageType]
-    immunity: Set[DamageType]
+    resistance: List[DamageType]
+    immunity: List[DamageType]
 
 @dataclass
 class AttackTry:
