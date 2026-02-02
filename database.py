@@ -2,7 +2,6 @@ import sqlite3
 import json
 from dataclasses import asdict
 from classes import Character,Defender,Attack,Dice,Damage,ToHit,DamageType
-from modules.test.Characters import fyn
 
 def add_character_to_db(char: Character):
     con = sqlite3.connect("database/characters.db")
@@ -44,7 +43,7 @@ def create_character():
     immunity = [DamageType[d.strip()] for d in immunity_input if d.strip()]
     
     defense = Defender(ac, resistance, immunity)
-    fyn = Character([], defense, name, hp)
+    char = Character([], defense, name, hp)
     
 
     print("\n--- Attacks ---")
@@ -65,11 +64,23 @@ def create_character():
         attacks_per_action = int(input("  Attacks per action (e.g. 1 or 2): "))
         
         attack = Attack(to_hit, [damage], atk_name, attacks_per_action)
-        fyn.attack_list.append(attack)
+        char.attack_list.append(attack)
         
         more = attack_menu()
     
-    add_character_to_db(fyn)
+    add_character_to_db(char)
     print("Character saved!")
 
+def remove_character():
+    
+    name = input("Character name: ")
 
+    con = sqlite3.connect("database/characters.db")
+    cur = con.cursor()
+    cur.execute(
+        "DELETE FROM characters WHERE name = ?",
+        (name,)
+    )
+
+    con.commit()
+    con.close()
